@@ -1,6 +1,24 @@
 import './style/App.scss';
 import 'classnames'
 import classNames from 'classnames';
+import { useCallback, useState } from 'react';
+
+function NewMessageText(props) {
+  const [value, setValue] = useState('')
+
+  const onChange = useCallback((event) => {
+    setValue(event.target.value)
+  })
+
+  return (
+    <div className="row new-message-row">
+      <div className="col new-message-col">
+        <textarea onChange={onChange} value={value} placeholder="Scrivi un messaggio..."></textarea>
+        <span className="counter">{value.length}/255</span>
+      </div>
+    </div>
+  )
+}
 
 function Message({message}) {
   return (
@@ -60,9 +78,10 @@ function Chat() {
             }
           </div>
         </div>
-        <div className="row new-message-row">
-          <div className="col new-message-col">
-            <textarea></textarea>
+        <NewMessageText />
+        <div className="row send-message-row">
+          <div className="col send-message-col">
+            <button>Invia</button>
           </div>
         </div>
       </div>
