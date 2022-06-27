@@ -49,14 +49,21 @@ function Chat() {
             <span>Prosalute</span>
           </div>
         </div>
-        <div className="message-list">
-          {
-            messages.map((message) => {
-              return (
-                <Message key={message.id} message={message} />
-              )
-            })
-          }
+        <div className="row message-list-row">
+          <div className="col message-list-col">
+            {
+              messages.map((message) => {
+                return (
+                  <Message key={message.id} message={message} />
+                )
+              })
+            }
+          </div>
+        </div>
+        <div className="row new-message-row">
+          <div className="col new-message-col">
+            <textarea></textarea>
+          </div>
         </div>
       </div>
     </div>
