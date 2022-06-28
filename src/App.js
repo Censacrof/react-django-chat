@@ -1,7 +1,7 @@
 import './style/App.scss';
 import 'classnames'
 import classNames from 'classnames';
-import { useRef, useCallback, useState } from 'react';
+import { useRef, useCallback, useState, useEffect } from 'react';
 
 function NewMessageTextArea(props) {
   const maxChars = 255;
@@ -19,14 +19,21 @@ function NewMessageTextArea(props) {
   )
 }
 
-function Message({message, currentSender, innerRef}) {
+function Message({message, currentSender, shouldFocus=false}) {
+  let ref = useRef()
+  useEffect(() => {
+    if (shouldFocus) {
+      ref.current.scrollIntoView()
+    }
+  }, [shouldFocus])
+
   return (
     <div className={classNames(
       'row',
       'message-row',
-      {'own': message.sender == currentSender}
+      {'own': message.sender === currentSender}
     )}>
-      <div ref={innerRef} className="col-9 message-col">
+      <div className="col-9 message-col" ref={ref}>
         <div className="row">
           <div className="col sender">
             <span>{message.sender}</span>
@@ -90,9 +97,9 @@ function Chat() {
         <div className="row message-list-row">
           <div ref={messageListRef} className="col message-list-col">
             {
-              messages.map((message) => {
+              messages.map((message, i) => {
                 return (
-                  <Message key={message.id} message={message}  currentSender={currentSender} />
+                  <Message key={message.id} message={message}  currentSender={currentSender} shouldFocus={i === messages.length - 1} />
                 )
               })
             }
