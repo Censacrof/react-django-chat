@@ -82,7 +82,7 @@
     .send-message-row {
       .send-message-col {
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
 
         button {
           padding: 14px 40px;

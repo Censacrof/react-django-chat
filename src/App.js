@@ -6,13 +6,65 @@ import { useRef, useCallback, useState, useEffect } from 'react';
 function NewMessageTextArea(props) {
   const maxChars = 255;
 
+  const [isCtrlDown, setIsCtrlDown] = useState(false)
+  const [isEnterDown, setIsEnterDown] = useState(false)
+  const onKeyDown = (event) => {
+    switch (event.keyCode) {
+      case 13:
+        // enter
+        setIsEnterDown(true)
+        break;
+      
+      case 17:
+        // ctrl
+        setIsCtrlDown(true)
+        break;
+      
+      default:
+        break;
+    }
+
+    if (isCtrlDown && isEnterDown) {
+      console.log('submit')
+      if (props.onSubmit != null)
+        props.onSubmit()
+    }
+  }
+
+  const onKeyUp = (event) => {
+    switch (event.keyCode) {
+      case 13:
+        // enter
+        setIsEnterDown(false)
+        break;
+      
+      case 17:
+        // ctrl
+        setIsCtrlDown(false)
+        break;
+      
+      default:
+        break;
+    }
+  }
+
+  const { onSubmitCallback } = props
+  useEffect(() => {
+    if (isCtrlDown && isEnterDown) {
+      if (onSubmitCallback != null) {
+        setIsEnterDown(false)
+        onSubmitCallback()
+      }
+    }
+  }, [isCtrlDown, isEnterDown, onSubmitCallback])
+
   return (
     <div className="row new-message-row">
       <div className="col new-message-col">
         <textarea ref={props.textAreaRef} value={props.value} placeholder="Scrivi un messaggio..." onChange={(event) => {
           let newValue = event.target.value.substring(0, maxChars)
           props.setValue(newValue)
-        }}></textarea>
+        }} onKeyDown={onKeyDown} onKeyUp={onKeyUp}></textarea>
         <span className="counter">{props.value.length}/{maxChars}</span>
       </div>
     </div>
@@ -72,7 +124,7 @@ function Chat() {
   const newMessageTextAreaRef = useRef()
   const messageListRef = useRef()
 
-  const sendMessageButtonClick = useCallback((event) => {
+  const onSubmitCallback = useCallback((event) => {
     let msg = createMessageData(
       Math.floor(Math.random() * 99999999),
       currentSender,
@@ -83,8 +135,7 @@ function Chat() {
     setNewMessageText('')
     setMessages(newMessages)
     newMessageTextAreaRef.current.focus()
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
-  })
+  }, [messages, newMessageText])
 
   return (
     <div className="row chat">
@@ -105,10 +156,10 @@ function Chat() {
             }
           </div>
         </div>
-        <NewMessageTextArea textAreaRef={newMessageTextAreaRef} value={newMessageText} setValue={setNewMessageText}/>
+        <NewMessageTextArea textAreaRef={newMessageTextAreaRef} value={newMessageText} setValue={setNewMessageText} onSubmitCallback={onSubmitCallback} />
         <div className="row send-message-row">
           <div className="col send-message-col">
-            <button onClick={sendMessageButtonClick}>Invia</button>
+            <button onClick={onSubmitCallback}>Invia</button>
           </div>
         </div>
       </div>
