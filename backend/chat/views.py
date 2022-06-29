@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import serializers, viewsets
-from rest_framework.permissions import DjangoModelPermissions, IsAdminUser
+from rest_framework.permissions import DjangoModelPermissions
 
 from chat.models import Message
 
@@ -14,4 +14,4 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = []
