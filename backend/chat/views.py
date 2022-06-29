@@ -9,6 +9,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Message
         fields = '__all__'
+        depth = 1
 
 # ViewSets define the view behavior.
 class MessageViewSet(viewsets.ModelViewSet):

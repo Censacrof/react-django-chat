@@ -82,12 +82,12 @@ function Message({message, currentUser, shouldFocus=false}) {
     <div className={classNames(
       'row',
       'message-row',
-      {'own': message.user === currentUser}
+      {'own': message.user.username === currentUser}
     )}>
       <div className="col-9 message-col" ref={ref}>
         <div className="row">
           <div className="col user">
-            <span>{message.user}</span>
+            <span>{message.user.username}</span>
           </div>
         </div>
         <div className="row">
