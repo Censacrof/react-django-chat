@@ -70,7 +70,7 @@ function NewMessageTextArea(props) {
   )
 }
 
-function Message({message, currentSender, shouldFocus=false}) {
+function Message({message, currentUser, shouldFocus=false}) {
   let ref = useRef()
   useEffect(() => {
     if (shouldFocus) {
@@ -82,12 +82,12 @@ function Message({message, currentSender, shouldFocus=false}) {
     <div className={classNames(
       'row',
       'message-row',
-      {'own': message.sender === currentSender}
+      {'own': message.user === currentUser}
     )}>
       <div className="col-9 message-col" ref={ref}>
         <div className="row">
-          <div className="col sender">
-            <span>{message.sender}</span>
+          <div className="col user">
+            <span>{message.user}</span>
           </div>
         </div>
         <div className="row">
@@ -106,17 +106,31 @@ function Message({message, currentSender, shouldFocus=false}) {
 }
 
 function Chat() {
-  const currentSender = 'Giovanni'
+  const currentUser = 'Giovanni'
 
-  const createMessageData = (id, sender, text) => {
-    return {id: id, sender: sender, text: text, date: '23 aprile 2022 | 10:53'}
+  const [messages, setMessages] = useState([])
+
+  const fetchMessages = async () => {
+    const url = 'http://localhost:8000/message/'
+
+    try {
+      const response = await fetch(url)
+      const json = await response.json()
+      console.log(json)
+      const messages = []
+      json.forEach((message) => {
+        messages.push(message)
+      })
+
+      setMessages(messages)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  const [messages, setMessages] = useState([
-    createMessageData(0, 'Aldo', 'Vaffangulooooo!'),
-    createMessageData(1, 'Giovanni', 'We sta calmino eh'),
-    createMessageData(2, 'Giacomo', 'Ma che ohhhhh'),
-  ])
+  useEffect(() => {
+    fetchMessages()
+  }, [])
 
   const [newMessageText, setNewMessageText] = useState('')
 
@@ -127,15 +141,15 @@ function Chat() {
     if (newMessageText.trim() === '')
         return
 
-    let msg = createMessageData(
-      Math.floor(Math.random() * 99999999),
-      currentSender,
-      newMessageText,
-    )
-    let newMessages = messages.concat(msg)
+    // let msg = createMessageData(
+    //   Math.floor(Math.random() * 99999999),
+    //   currentUser,
+    //   newMessageText,
+    // )
+    // let newMessages = messages.concat(msg)
+    // setMessages(newMessages)
     
     setNewMessageText('')
-    setMessages(newMessages)
     newMessageTextAreaRef.current.focus()
   }, [messages, newMessageText])
 
@@ -152,7 +166,7 @@ function Chat() {
             {
               messages.map((message, i) => {
                 return (
-                  <Message key={message.id} message={message}  currentSender={currentSender} shouldFocus={i === messages.length - 1} />
+                  <Message key={message.url} message={message}  currentUser={currentUser} shouldFocus={i === messages.length - 1} />
                 )
               })
             }
