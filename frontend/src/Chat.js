@@ -25,7 +25,6 @@ function NewMessageTextArea(props) {
     }
 
     if (isCtrlDown && isEnterDown) {
-      console.log('submit')
       if (props.onSubmit != null)
         props.onSubmit()
     }
@@ -125,6 +124,9 @@ function Chat() {
   const messageListRef = useRef()
 
   const onSubmitCallback = useCallback((event) => {
+    if (newMessageText.trim() === '')
+        return
+
     let msg = createMessageData(
       Math.floor(Math.random() * 99999999),
       currentSender,
@@ -159,7 +161,7 @@ function Chat() {
         <NewMessageTextArea textAreaRef={newMessageTextAreaRef} value={newMessageText} setValue={setNewMessageText} onSubmitCallback={onSubmitCallback} />
         <div className="row send-message-row">
           <div className="col send-message-col">
-            <button onClick={onSubmitCallback}>Invia</button>
+            <button className="btn" onClick={onSubmitCallback} disabled={newMessageText.trim() === ''}>Invia</button>
           </div>
         </div>
       </div>
