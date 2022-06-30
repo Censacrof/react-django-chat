@@ -158,7 +158,7 @@ function Chat() {
       <div className="col">
         <div className="header row">
           <div className="col">
-            <span>Prosalute</span>
+            <span>Chat</span>
           </div>
         </div>
         <div className="row message-list-row">
