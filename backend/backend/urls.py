@@ -1,15 +1,10 @@
 from django.urls import path, include
 from django.contrib.auth.models import User
 from django.contrib import admin
-from rest_framework import routers, serializers, viewsets
+from rest_framework import routers, viewsets
 
 from chat.views import MessageViewSet
-
-# Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'is_staff']
+from backend.serializers import UserSerializer
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -18,8 +13,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-router.register(r'user', UserViewSet)
-router.register(r'message', MessageViewSet)
+router.register(r'user', UserViewSet, basename='user')
+router.register(r'message', MessageViewSet, basename='message')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
