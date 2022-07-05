@@ -71,7 +71,7 @@ function NewMessageTextArea(props) {
   )
 }
 
-function Message({message, currentUser, shouldFocus=false}) {
+function Message({message, shouldFocus=false}) {
   let ref = useRef()
   useEffect(() => {
     if (shouldFocus) {
@@ -83,7 +83,7 @@ function Message({message, currentUser, shouldFocus=false}) {
     <div className={classNames(
       'row',
       'message-row',
-      {'own': message.user.username === currentUser}
+      {'own': message.user.url === getApiInstance().currentUserInfo.url}
     )}>
       <div className="col-9 message-col" ref={ref}>
         <div className="row">
@@ -136,7 +136,7 @@ function Chat(props) {
       try {
         const newMessage = await api.sendMessage(newMessageText)
         const newMessages = messages.concat(newMessage)
-      
+
         setMessages(newMessages)
         setNewMessageText('')
         newMessageTextAreaRef.current.focus()
