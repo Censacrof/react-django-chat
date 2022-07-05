@@ -97,7 +97,7 @@ function Message({message, currentUser, shouldFocus=false}) {
         </div>
         <div className="row">
           <div className="col date">
-            <span>{message.date}</span>
+            <span>{new Date(message.date).toLocaleString()}</span>
           </div>
         </div>
       </div>
