@@ -9,7 +9,7 @@ class MessageSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class MessageSerializerList(serializers.HyperlinkedModelSerializer):
+class MessageSerializerDeep(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Message
         fields = '__all__'
