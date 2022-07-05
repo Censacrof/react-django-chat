@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { AuthenticationError } from './Api'
+import { AuthenticationError , getApiInstance} from './Api'
 import './style/App.scss'
 
 
@@ -19,8 +19,10 @@ function Login(props) {
     setPasswordFeedback('')
     setFormFeedback('')
 
+    const api = getApiInstance()
+
     try {
-      await props.api.authenticate(username, password)
+      await api.authenticate(username, password)
     } catch (error) {
       if (error instanceof AuthenticationError) {
         if (error.status === 400) {
@@ -40,7 +42,7 @@ function Login(props) {
         }
       }
     }
-  }, [password, props.api, username])
+  }, [password, username])
  
   return (
     <div className="row login">

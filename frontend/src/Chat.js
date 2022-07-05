@@ -2,6 +2,7 @@ import './style/App.scss';
 import 'classnames'
 import classNames from 'classnames';
 import { useRef, useCallback, useState, useEffect } from 'react';
+import { getApiInstance } from './Api';
 
 function NewMessageTextArea(props) {
   const maxChars = 255;
@@ -105,9 +106,10 @@ function Message({message, currentUser, shouldFocus=false}) {
   )
 }
 
-function Chat() {
+function Chat(props) {
   const currentUser = 'Giovanni'
 
+  const api = getApiInstance()
   const [messages, setMessages] = useState([])
 
   const fetchMessages = async () => {
@@ -158,7 +160,7 @@ function Chat() {
       <div className="col">
         <div className="header row">
           <div className="col">
-            <span>Chat</span>
+            <span>{api.currentUserInfo.username}</span>
           </div>
         </div>
         <div className="row message-list-row">

@@ -16,10 +16,35 @@ class Api {
         this.accessToken = ''
 
         this.loginCallbacks = []
+        this.currentUserInfo = null
     }
 
     onLogin(callback) {
         this.loginCallbacks.push(callback)
+    }
+
+    _fetch(path, requestInit = {}) {
+        const url = new URL(path, this.baseUrl)
+
+        if (requestInit.headers == null) {
+            requestInit.headers = new Headers()
+        }
+
+        requestInit.headers.set('Authorization', 'Bearer ' + this.accessToken)
+        requestInit.headers.set('Content-Type', 'application/x-www-form-urlencoded')
+
+        return fetch(url, requestInit)
+    }
+
+    async _fetchCurrentUserInfo() {
+        const response = await this._fetch('/current-user-info/')
+        
+        if (!response.ok) {
+            return
+        }
+
+        this.currentUserInfo = await response.json()
+        console.log(this.currentUserInfo)
     }
     
     async authenticate(username, password) {
@@ -37,6 +62,7 @@ class Api {
         })
         
         const body = await response.json()
+        console.log(body)
 
         if (!response.ok) {
             throw new AuthenticationError(response.status, body)
@@ -45,8 +71,18 @@ class Api {
         this.accessToken = body.access
         this.refereshToken = body.refresh
 
+        await this._fetchCurrentUserInfo()
+
         this.loginCallbacks.forEach((callback) => callback())
     }
 }
 
-export default Api
+let apiInstance = null
+export function getApiInstance() {
+    if (apiInstance == null) {
+        apiInstance = new Api()
+        console.log('Created Api instance')
+    }
+
+    return apiInstance
+}
