@@ -121,7 +121,7 @@ function Chat(props) {
         console.log(error)
       }
     })()
-  }, [])
+  }, [api])
 
   const [newMessageText, setNewMessageText] = useState('')
 
@@ -132,9 +132,19 @@ function Chat(props) {
     if (newMessageText.trim() === '')
         return
     
-    setNewMessageText('')
-    newMessageTextAreaRef.current.focus()
-  }, [newMessageText])
+    (async () => {
+      try {
+        const newMessage = await api.sendMessage(newMessageText)
+        const newMessages = messages.concat(newMessage)
+      
+        setMessages(newMessages)
+        setNewMessageText('')
+        newMessageTextAreaRef.current.focus()
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }, [messages, newMessageText])
 
   return (
     <div className="row chat">

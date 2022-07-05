@@ -31,8 +31,8 @@ class Api {
         }
         
         requestInit.headers.set('Authorization', 'Bearer ' + this.accessToken)
-        requestInit.headers.set('Content-Type', 'application/x-www-form-urlencoded')
         
+        console.log(requestInit)
         return fetch(url, requestInit)
     }
     
@@ -88,6 +88,24 @@ class Api {
         })
         
         return messages
+    }
+    
+    async sendMessage(text) {
+        const url = new URL('/message/', this.baseUrl)
+        
+        const response = await this._fetch(url, {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json',
+            }),
+            body: JSON.stringify({
+                'text': text,
+                'user': this.currentUserInfo.url,
+            }),
+        })
+
+        const newMessage = await response.json()
+        return newMessage
     }
 }
 
