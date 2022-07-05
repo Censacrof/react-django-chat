@@ -112,26 +112,11 @@ function Chat(props) {
   const api = getApiInstance()
   const [messages, setMessages] = useState([])
 
-  const fetchMessages = async () => {
-    const url = 'http://localhost:8000/message/'
-
-    try {
-      const response = await fetch(url)
-      const json = await response.json()
-      console.log(json)
-      const messages = []
-      json.forEach((message) => {
-        messages.push(message)
-      })
-
-      setMessages(messages)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   useEffect(() => {
-    fetchMessages()
+    (async () => {
+      const newMessages = await api.getMessages()
+      setMessages(newMessages)
+    })()
   }, [])
 
   const [newMessageText, setNewMessageText] = useState('')
@@ -142,18 +127,10 @@ function Chat(props) {
   const onSubmitCallback = useCallback((event) => {
     if (newMessageText.trim() === '')
         return
-
-    // let msg = createMessageData(
-    //   Math.floor(Math.random() * 99999999),
-    //   currentUser,
-    //   newMessageText,
-    // )
-    // let newMessages = messages.concat(msg)
-    // setMessages(newMessages)
     
     setNewMessageText('')
     newMessageTextAreaRef.current.focus()
-  }, [messages, newMessageText])
+  }, [newMessageText])
 
   return (
     <div className="row chat">
