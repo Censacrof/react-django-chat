@@ -114,8 +114,12 @@ function Chat(props) {
 
   useEffect(() => {
     (async () => {
-      const newMessages = await api.getMessages()
-      setMessages(newMessages)
+      try {
+        const newMessages = await api.getMessages()
+        setMessages(newMessages)
+      } catch (error) {
+        console.log(error)
+      }
     })()
   }, [])
 

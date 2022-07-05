@@ -79,19 +79,15 @@ class Api {
     async getMessages() {
         const url = new URL('/message/', this.baseUrl)
         
-        try {
-            const response = await this._fetch(url)
-            const json = await response.json()
-            console.log(json)
-            const messages = []
-            json.forEach((message) => {
-                messages.push(message)
-            })
-            
-            return messages
-        } catch (error) {
-            console.log(error)
-        }
+        const response = await this._fetch(url)
+        const json = await response.json()
+        console.log(json)
+        const messages = []
+        json.forEach((message) => {
+            messages.push(message)
+        })
+        
+        return messages
     }
 }
 
