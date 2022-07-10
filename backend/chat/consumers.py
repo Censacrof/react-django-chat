@@ -8,4 +8,5 @@ class ChatConsumer(WebsocketConsumer):
         pass
 
     def receive(self, text_data):
-        print(text_data)
+        user = self.scope["user"]
+        print(f'Authenticated: {user.is_authenticated}')
