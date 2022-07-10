@@ -17,6 +17,23 @@ class Api {
         
         this.loginCallbacks = []
         this.currentUserInfo = null
+
+        this.chatSocket = null
+    }
+
+    initChatWebSocket() {
+        const url = new URL(`/ws/chat/?token=${this.accessToken}`, this.baseUrl)
+        url.protocol = 'ws'
+        
+        this.chatSocket = new WebSocket(url)
+
+        const logFunc = (socket, event) => {
+            console.log(event)
+        }
+
+        // TODO set appropriate listeners
+        this.chatSocket.addEventListener('error', logFunc)
+        this.chatSocket.addEventListener('message', logFunc)
     }
     
     onLogin(callback) {

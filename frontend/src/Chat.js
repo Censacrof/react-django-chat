@@ -117,6 +117,7 @@ function Chat(props) {
       try {
         const newMessages = await api.getMessages()
         setMessages(newMessages)
+        api.initChatWebSocket()
       } catch (error) {
         console.log(error)
       }
@@ -144,7 +145,7 @@ function Chat(props) {
         console.log(error)
       }
     })()
-  }, [messages, newMessageText])
+  }, [messages, newMessageText, api])
 
   return (
     <div className="row chat">
