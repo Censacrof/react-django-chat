@@ -83,7 +83,7 @@ function Message({message, shouldFocus=false}) {
     <div className={classNames(
       'row',
       'message-row',
-      {'own': message.user.url === getApiInstance().currentUserInfo.url}
+      {'own': message.user.id === getApiInstance().currentUserInfo.id}
     )}>
       <div className="col-9 message-col" ref={ref}>
         <div className="row">
@@ -117,7 +117,7 @@ function Chat(props) {
       try {
         const newMessages = await api.getMessages()
         setMessages(newMessages)
-        api.initChatWebSocket()
+        await api.initChatWebSocket()
       } catch (error) {
         console.log(error)
       }
@@ -160,7 +160,7 @@ function Chat(props) {
             {
               messages.map((message, i) => {
                 return (
-                  <Message key={message.url} message={message}  currentUser={currentUser} shouldFocus={i === messages.length - 1} />
+                  <Message key={message.id} message={message}  currentUser={currentUser} shouldFocus={i === messages.length - 1} />
                 )
               })
             }
