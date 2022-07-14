@@ -40,7 +40,7 @@ class Api {
             const data = JSON.parse(event.data)
             console.log(data)
             this.messageReceivedCallbacks.forEach(async (callback) => {
-                callback(data.payload.message)
+                console.log(data)
             })
         })
     }

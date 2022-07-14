@@ -15,12 +15,12 @@ function NewMessageTextArea(props) {
         // enter
         setIsEnterDown(true)
         break;
-      
+
       case 17:
         // ctrl
         setIsCtrlDown(true)
         break;
-      
+
       default:
         break;
     }
@@ -37,12 +37,12 @@ function NewMessageTextArea(props) {
         // enter
         setIsEnterDown(false)
         break;
-      
+
       case 17:
         // ctrl
         setIsCtrlDown(false)
         break;
-      
+
       default:
         break;
     }
@@ -71,7 +71,7 @@ function NewMessageTextArea(props) {
   )
 }
 
-function Message({message, shouldFocus=false}) {
+function Message({ message, shouldFocus = false }) {
   let ref = useRef()
   useEffect(() => {
     if (shouldFocus) {
@@ -83,7 +83,7 @@ function Message({message, shouldFocus=false}) {
     <div className={classNames(
       'row',
       'message-row',
-      {'own': message.user.id === getApiInstance().currentUserInfo.id}
+      { 'own': message.user.id === getApiInstance().currentUserInfo.id }
     )}>
       <div className="col-9 message-col" ref={ref}>
         <div className="row">
@@ -131,12 +131,12 @@ function Chat(props) {
 
   const onSubmitCallback = useCallback((event) => {
     if (newMessageText.trim() === '')
-        return
-    
+      return
+
     (async () => {
       try {
         await api.sendMessage(newMessageText)
-        
+
         setNewMessageText('')
         newMessageTextAreaRef.current.focus()
       } catch (error) {
@@ -145,9 +145,11 @@ function Chat(props) {
     })()
   }, [messages, newMessageText, api])
 
-  api.onMessageReceived((newMessage) => {
-    const newMessages = messages.concat(newMessage)
-    setMessages(newMessages)
+  useEffect(() => {
+    api.onMessageReceived((newMessage) => {
+      const newMessages = messages.concat(newMessage)
+      setMessages(newMessages)
+    })
   })
 
   return (
@@ -163,7 +165,7 @@ function Chat(props) {
             {
               messages.map((message, i) => {
                 return (
-                  <Message key={message.id} message={message}  currentUser={currentUser} shouldFocus={i === messages.length - 1} />
+                  <Message key={message.id} message={message} currentUser={currentUser} shouldFocus={i === messages.length - 1} />
                 )
               })
             }
