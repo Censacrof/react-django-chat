@@ -39,7 +39,7 @@ class Api {
         this.chatSocket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data)
             console.log(data)
-            this.messageReceivedCallbacks.forEach((callback) => {
+            this.messageReceivedCallbacks.forEach(async (callback) => {
                 callback(data.payload.message)
             })
         })
@@ -103,7 +103,7 @@ class Api {
 
         await this._fetchCurrentUserInfo()
 
-        this.loginCallbacks.forEach((callback) => callback())
+        this.loginCallbacks.forEach(async (callback) => callback())
     }
 
     async getMessages() {
