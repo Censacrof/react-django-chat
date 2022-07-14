@@ -39,6 +39,9 @@ class Api {
         this.chatSocket.addEventListener('message', (event) => {
             const data = JSON.parse(event.data)
             console.log(data)
+            this.messageReceivedCallbacks.forEach((callback) => {
+                callback(data.payload.message)
+            })
         })
     }
 
@@ -47,7 +50,7 @@ class Api {
     }
 
     onMessageReceived(callback) {
-        this.messageReceivedCallbacks(callback)
+        this.messageReceivedCallbacks.push(callback)
     }
 
     _fetch(path, requestInit = {}) {

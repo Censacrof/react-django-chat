@@ -135,10 +135,8 @@ function Chat(props) {
     
     (async () => {
       try {
-        const newMessage = await api.sendMessage(newMessageText)
-        const newMessages = messages.concat(newMessage)
-
-        setMessages(newMessages)
+        await api.sendMessage(newMessageText)
+        
         setNewMessageText('')
         newMessageTextAreaRef.current.focus()
       } catch (error) {
@@ -146,6 +144,11 @@ function Chat(props) {
       }
     })()
   }, [messages, newMessageText, api])
+
+  api.onMessageReceived((newMessage) => {
+    const newMessages = messages.concat(newMessage)
+    setMessages(newMessages)
+  })
 
   return (
     <div className="row chat">
