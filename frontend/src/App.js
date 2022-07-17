@@ -1,11 +1,11 @@
 import 'classnames'
 import { useState } from 'react';
+import Chat from './components/chat/chat';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-
   return (
     <div className="App container">
+      <Chat />
     </div>
   );
 }
